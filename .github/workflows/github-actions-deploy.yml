@@ -1,0 +1,46 @@
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Push AWS Lambda function
+    env:
+        PROJECT_NAME: Test7
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event"
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET @ Latest
+        uses: actions/setup-dotnet@v1
+        with:
+          source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+          dotnet-version: 7.0.x
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.PACKAGE_TOKEN}}
+
+      - name: Restore project
+        run: "dotnet restore ${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}.sln"
+
+      - name: Build project
+        run: "dotnet build ${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}.sln --no-restore -c Release"
+
+      - name: Install Lambda Tool
+        run: dotnet tool install -g Amazon.Lambda.Tools
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_SECRET_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: eu-west-1
+        
+      - name: Deploy Lambda Function
+        run: 'dotnet lambda deploy-function -pl ./${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}/src/${{env.PROJECT_NAME}}'

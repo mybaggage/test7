@@ -1,0 +1,12 @@
+bin
+obj
+packages
+*.suo
+*.user
+*.pubxml
+*.ide
+*.lock
+*.ide-shm
+*.ide-wal
+*.bak
+.vs

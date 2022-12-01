@@ -1,0 +1,13 @@
+{
+	"profile": "Mark",
+	"region": "eu-west-1",
+	"configuration": "Release",
+	"framework": "net7.0",
+	"function-runtime": "provided.al2",
+	"function-memory-size": 256,
+	"function-timeout": 30,
+	"function-handler": "bootstrap",
+	"function-name": "Test7",
+	"function-role": "arn:aws:iam::182103675410:role/MBAdmin",
+	"msbuild-parameters": "/p:AssemblyName=bootstrap --self-contained true"
+}
