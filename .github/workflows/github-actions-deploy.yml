@@ -25,8 +25,8 @@ jobs:
           dotnet-version: 7.0.x
         env:
           NUGET_AUTH_TOKEN: ${{secrets.PACKAGE_TOKEN}}
-        - run: |
-          mv '${{ github.workspace }}/../nuget.config' '${{ github.workspace }}/${{env.PROJECT_NAME}}/nuget.config'
+      - run: |
+        mv '${{ github.workspace }}/../nuget.config' '${{ github.workspace }}/${{env.PROJECT_NAME}}/nuget.config'
 
       - name: Restore project
         run: "dotnet restore ${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}.sln"
