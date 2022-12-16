@@ -19,12 +19,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup .NET @ Latest
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
           dotnet-version: 7.0.x
         env:
           NUGET_AUTH_TOKEN: ${{secrets.PACKAGE_TOKEN}}
+      - run: |
+          mv '${{ github.workspace }}/../nuget.config' '${{ github.workspace }}/${{env.PROJECT_NAME}}/nuget.config'
 
       - name: Restore project
         run: "dotnet restore ${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}.sln"
